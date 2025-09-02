@@ -10,32 +10,33 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
+
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL?.replace(/\/$/, "") // strip trailing slash if present
+  process.env.FRONTEND_URL?.replace(/\/$/, "")
 ].filter(Boolean);
 
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+console.log("Allowed origins:", allowedOrigins);
 
 app.use(
   cors({
-    origin: function (origin, callback) {
+    origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error("Not allowed by CORS: " + origin));
       }
     },
     credentials: true,
   })
 );
 
-
+// ✅ Only paths here, no full URLs
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 

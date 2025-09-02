@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL?.replace(/\/$/, "") // strip trailing slash
+  process.env.FRONTEND_URL?.replace(/\/$/, "")
 ].filter(Boolean);
 
 const io = new Server(server, {
@@ -17,13 +17,12 @@ const io = new Server(server, {
   },
 });
 
+// store online users
+const userSocketMap = {}; // { userId: socketId }
 
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
 }
-
-// store online users
-const userSocketMap = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
   console.log("A user connected", socket.id);
@@ -31,7 +30,6 @@ io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
   if (userId) userSocketMap[userId] = socket.id;
 
-  // io.emit() is used to send events to all the connected clients
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
