@@ -5,14 +5,11 @@ import express from "express";
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL?.replace(/\/$/, "")
-].filter(Boolean);
+const FRONTEND_URL = process.env.FRONTEND_URL?.replace(/\/$/, "") || "http://localhost:5173";
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: FRONTEND_URL, // ✅ Single string, not array
     credentials: true,
   },
 });

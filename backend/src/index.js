@@ -16,33 +16,21 @@ const __dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL?.replace(/\/$/, "")
-].filter(Boolean);
-
-console.log("Allowed origins:", allowedOrigins);
-
+// ✅ Simple CORS setup (fixes path-to-regexp error)
 console.log("FRONTEND_URL loaded:", process.env.FRONTEND_URL);
-
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS: " + origin));
-      }
-    },
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true,
   })
 );
 
-// ✅ Only paths here, no full URLs
+// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
+// Serve frontend in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
@@ -55,3 +43,4 @@ server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
   connectDB();
 });
+
