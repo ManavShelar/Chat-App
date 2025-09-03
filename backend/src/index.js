@@ -10,27 +10,21 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
-
-// ✅ Simple CORS setup (fixes path-to-regexp error)
-console.log("FRONTEND_URL loaded:", process.env.FRONTEND_URL);
-
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
 
-// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// Serve frontend in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
