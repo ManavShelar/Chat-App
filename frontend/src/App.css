@@ -1,3 +1,17 @@
+/* Always take full height */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Use the same font everywhere */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: theme('colors.base-100'); /* Tailwind base */
+  color: theme('colors.base-content');
+}
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: "light",

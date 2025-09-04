@@ -1,4 +1,39 @@
 @import "tailwindcss";
+
+/* ---------- Base Layer (applied globally) ---------- */
+@layer base {
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    @apply bg-base-100 text-base-content font-sans;
+  }
+
+  input, button, textarea, select {
+    @apply appearance-none outline-none;
+  }
+
+  
+}
+
+/* ---------- Custom Scrollbars ---------- */
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-base-300 rounded-lg;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-base-100;
+  }
+}
+
 @plugin "daisyui" {
   themes: "light",
       "dark",
